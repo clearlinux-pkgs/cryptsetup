@@ -4,7 +4,7 @@
 #
 Name     : cryptsetup
 Version  : 1.6.8
-Release  : 7
+Release  : 8
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/cryptsetup-1.6.8.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/cryptsetup-1.6.8.tar.xz
 Summary  : cryptsetup library
