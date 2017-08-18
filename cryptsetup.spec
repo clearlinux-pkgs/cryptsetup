@@ -4,7 +4,7 @@
 #
 Name     : cryptsetup
 Version  : 1.6.8
-Release  : 12
+Release  : 13
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/cryptsetup-1.6.8.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/cryptsetup-1.6.8.tar.xz
 Summary  : cryptsetup library
@@ -23,6 +23,7 @@ BuildRequires : pkgconfig(openssl)
 BuildRequires : pkgconfig(pwquality)
 BuildRequires : popt-dev
 BuildRequires : python-dev
+BuildRequires : python3
 
 %description
 cryptsetup
@@ -84,16 +85,23 @@ python components for the cryptsetup package.
 %setup -q -n cryptsetup-1.6.8
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+export LANG=C
+export SOURCE_DATE_EPOCH=1503075472
 %configure --disable-static --enable-python
 make V=1  %{?_smp_mflags}
 
 %check
+export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
+export SOURCE_DATE_EPOCH=1503075472
 rm -rf %{buildroot}
 %make_install
 %find_lang cryptsetup
@@ -109,8 +117,8 @@ rm -rf %{buildroot}
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libcryptsetup.so
+/usr/lib64/pkgconfig/libcryptsetup.pc
 
 %files doc
 %defattr(-,root,root,-)
@@ -118,12 +126,13 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libcryptsetup.so.4
+/usr/lib64/libcryptsetup.so.4.7.0
 
 %files python
 %defattr(-,root,root,-)
-/usr/lib/python*/*
+/usr/lib/python2*/*
 
-%files locales -f cryptsetup.lang 
+%files locales -f cryptsetup.lang
 %defattr(-,root,root,-)
 

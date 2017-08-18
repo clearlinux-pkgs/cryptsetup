@@ -1,0 +1,10 @@
+libc.so.6
+libdevmapper.so.1.02
+libdl.so.2
+libgcrypt.so.20
+libm.so.6
+libpopt.so.0
+libpthread.so.0
+libpython2.7.so.1.0
+libutil.so.1
+libuuid.so.1
