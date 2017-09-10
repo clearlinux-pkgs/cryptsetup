@@ -4,14 +4,14 @@
 #
 Name     : cryptsetup
 Version  : 1.7.5
-Release  : 14
+Release  : 15
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/cryptsetup-1.7.5.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/cryptsetup-1.7.5.tar.xz
 Summary  : cryptsetup library
 Group    : Development/Tools
 License  : GPL-2.0 LGPL-2.1
 Requires: cryptsetup-bin
-Requires: cryptsetup-python
+Requires: cryptsetup-legacypython
 Requires: cryptsetup-lib
 Requires: cryptsetup-locales
 Requires: cryptsetup-doc
@@ -57,6 +57,14 @@ Group: Documentation
 doc components for the cryptsetup package.
 
 
+%package legacypython
+Summary: legacypython components for the cryptsetup package.
+Group: Default
+
+%description legacypython
+legacypython components for the cryptsetup package.
+
+
 %package lib
 Summary: lib components for the cryptsetup package.
 Group: Libraries
@@ -73,14 +81,6 @@ Group: Default
 locales components for the cryptsetup package.
 
 
-%package python
-Summary: python components for the cryptsetup package.
-Group: Default
-
-%description python
-python components for the cryptsetup package.
-
-
 %prep
 %setup -q -n cryptsetup-1.7.5
 
@@ -89,7 +89,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1503437280
+export SOURCE_DATE_EPOCH=1505001609
 %configure --disable-static --enable-python
 make V=1  %{?_smp_mflags}
 
@@ -101,7 +101,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1503437280
+export SOURCE_DATE_EPOCH=1505001609
 rm -rf %{buildroot}
 %make_install
 %find_lang cryptsetup
@@ -124,14 +124,14 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc /usr/share/man/man8/*
 
+%files legacypython
+%defattr(-,root,root,-)
+/usr/lib/python2*/*
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libcryptsetup.so.4
 /usr/lib64/libcryptsetup.so.4.7.0
-
-%files python
-%defattr(-,root,root,-)
-/usr/lib/python2*/*
 
 %files locales -f cryptsetup.lang
 %defattr(-,root,root,-)
