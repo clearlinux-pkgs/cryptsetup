@@ -5,6 +5,6 @@ libgcrypt.so.20
 libm.so.6
 libpopt.so.0
 libpthread.so.0
-libpython2.7.so.1.0
+libpython3.6m.so.1.0
 libutil.so.1
 libuuid.so.1

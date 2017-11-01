@@ -1,1 +1,1 @@
---enable-python
+--enable-python --with-python_version=3
