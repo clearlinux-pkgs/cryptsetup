@@ -5,17 +5,18 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 1.7.5
-Release  : 17
+Release  : 18
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/cryptsetup-1.7.5.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/cryptsetup-1.7.5.tar.xz
 Summary  : cryptsetup library
 Group    : Development/Tools
 License  : GPL-2.0 LGPL-2.1
 Requires: cryptsetup-bin
-Requires: cryptsetup-python
+Requires: cryptsetup-python3
 Requires: cryptsetup-lib
 Requires: cryptsetup-locales
 Requires: cryptsetup-doc
+Requires: cryptsetup-python
 BuildRequires : libgcrypt-dev
 BuildRequires : libgpg-error-dev
 BuildRequires : pkgconfig(devmapper)
@@ -77,9 +78,19 @@ locales components for the cryptsetup package.
 %package python
 Summary: python components for the cryptsetup package.
 Group: Default
+Requires: cryptsetup-python3
 
 %description python
 python components for the cryptsetup package.
+
+
+%package python3
+Summary: python3 components for the cryptsetup package.
+Group: Default
+Requires: python3-core
+
+%description python3
+python3 components for the cryptsetup package.
 
 
 %prep
@@ -91,9 +102,9 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1513118160
-%configure  --enable-python --with-python_version=3
-make V=1  %{?_smp_mflags}
+export SOURCE_DATE_EPOCH=1513802430
+%configure  --enable-python --with-python_version=3 --enable-static
+make  %{?_smp_mflags}
 
 %check
 export LANG=C
@@ -103,7 +114,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1513118160
+export SOURCE_DATE_EPOCH=1513802430
 rm -rf %{buildroot}
 %make_install
 %find_lang cryptsetup
@@ -119,6 +130,7 @@ rm -rf %{buildroot}
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
+/usr/lib64/*.a
 /usr/lib64/libcryptsetup.so
 /usr/lib64/pkgconfig/libcryptsetup.pc
 
@@ -132,6 +144,9 @@ rm -rf %{buildroot}
 /usr/lib64/libcryptsetup.so.4.7.0
 
 %files python
+%defattr(-,root,root,-)
+
+%files python3
 %defattr(-,root,root,-)
 /usr/lib/python3*/*
 
