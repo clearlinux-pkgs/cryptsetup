@@ -2,6 +2,7 @@ libc.so.6
 libdevmapper.so.1.02
 libdl.so.2
 libgcrypt.so.20
+libjson-c.so.3
 libm.so.6
 libpopt.so.0
 libpthread.so.0

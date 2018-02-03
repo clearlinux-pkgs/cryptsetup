@@ -4,15 +4,16 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 1.7.5
-Release  : 20
-URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/cryptsetup-1.7.5.tar.xz
-Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/cryptsetup-1.7.5.tar.xz
+Version  : 2.0.1
+Release  : 21
+URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.1.tar.xz
+Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.1.tar.xz
 Summary  : cryptsetup library
 Group    : Development/Tools
-License  : GPL-2.0 LGPL-2.1
+License  : CC0-1.0 GPL-2.0 LGPL-2.1
 Requires: cryptsetup-bin
 Requires: cryptsetup-python3
+Requires: cryptsetup-config
 Requires: cryptsetup-lib
 Requires: cryptsetup-locales
 Requires: cryptsetup-doc
@@ -20,6 +21,7 @@ Requires: cryptsetup-python
 BuildRequires : libgcrypt-dev
 BuildRequires : libgpg-error-dev
 BuildRequires : pkgconfig(devmapper)
+BuildRequires : pkgconfig(json-c)
 BuildRequires : pkgconfig(openssl)
 BuildRequires : pkgconfig(pwquality)
 BuildRequires : popt-dev
@@ -34,9 +36,18 @@ WEB PAGE:
 %package bin
 Summary: bin components for the cryptsetup package.
 Group: Binaries
+Requires: cryptsetup-config
 
 %description bin
 bin components for the cryptsetup package.
+
+
+%package config
+Summary: config components for the cryptsetup package.
+Group: Default
+
+%description config
+config components for the cryptsetup package.
 
 
 %package dev
@@ -93,7 +104,7 @@ python3 components for the cryptsetup package.
 
 
 %prep
-%setup -q -n cryptsetup-1.7.5
+%setup -q -n cryptsetup-2.0.1
 %patch1 -p1
 
 %build
@@ -101,7 +112,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1513806502
+export SOURCE_DATE_EPOCH=1517679566
 %configure  --enable-python --with-python_version=3 --enable-static
 make  %{?_smp_mflags}
 
@@ -113,7 +124,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1513806502
+export SOURCE_DATE_EPOCH=1517679566
 rm -rf %{buildroot}
 %make_install
 %find_lang cryptsetup
@@ -124,7 +135,13 @@ rm -rf %{buildroot}
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/cryptsetup
+/usr/bin/cryptsetup-reencrypt
+/usr/bin/integritysetup
 /usr/bin/veritysetup
+
+%files config
+%defattr(-,root,root,-)
+/usr/lib/tmpfiles.d/cryptsetup.conf
 
 %files dev
 %defattr(-,root,root,-)
@@ -139,8 +156,8 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libcryptsetup.so.4
-/usr/lib64/libcryptsetup.so.4.7.0
+/usr/lib64/libcryptsetup.so.12
+/usr/lib64/libcryptsetup.so.12.1.0
 
 %files python
 %defattr(-,root,root,-)
