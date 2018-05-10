@@ -1,1 +1,1 @@
---enable-python --with-python_version=3 --enable-static
+--enable-python --with-python_version=3 --enable-static --enable-pwquality
