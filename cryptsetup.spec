@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 2.0.1
-Release  : 26
+Release  : 27
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.1.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.1.tar.xz
 Summary  : cryptsetup library
@@ -18,8 +18,8 @@ Requires: cryptsetup-lib
 Requires: cryptsetup-locales
 Requires: cryptsetup-doc
 Requires: cryptsetup-python
-Requires: LLVM2
-Requires: LLVM2-extras
+Requires: LVM2
+Requires: LVM2-extras
 BuildRequires : libgcrypt-dev
 BuildRequires : libgpg-error-dev
 BuildRequires : pkgconfig(devmapper)
@@ -114,7 +114,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1526498502
+export SOURCE_DATE_EPOCH=1526504712
 %configure  --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 
@@ -126,7 +126,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1526498502
+export SOURCE_DATE_EPOCH=1526504712
 rm -rf %{buildroot}
 %make_install
 %find_lang cryptsetup
