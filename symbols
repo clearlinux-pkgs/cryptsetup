@@ -15,6 +15,7 @@ libcryptsetup.so.12:crypt_dump
 libcryptsetup.so.12:crypt_format
 libcryptsetup.so.12:crypt_free
 libcryptsetup.so.12:crypt_get_active_device
+libcryptsetup.so.12:crypt_get_active_integrity_failures
 libcryptsetup.so.12:crypt_get_cipher
 libcryptsetup.so.12:crypt_get_cipher_mode
 libcryptsetup.so.12:crypt_get_data_offset
@@ -22,6 +23,7 @@ libcryptsetup.so.12:crypt_get_device_name
 libcryptsetup.so.12:crypt_get_dir
 libcryptsetup.so.12:crypt_get_integrity_info
 libcryptsetup.so.12:crypt_get_iv_offset
+libcryptsetup.so.12:crypt_get_pbkdf_default
 libcryptsetup.so.12:crypt_get_pbkdf_type
 libcryptsetup.so.12:crypt_get_rng_type
 libcryptsetup.so.12:crypt_get_sector_size
@@ -45,6 +47,7 @@ libcryptsetup.so.12:crypt_keyslot_add_by_volume_key
 libcryptsetup.so.12:crypt_keyslot_area
 libcryptsetup.so.12:crypt_keyslot_change_by_passphrase
 libcryptsetup.so.12:crypt_keyslot_destroy
+libcryptsetup.so.12:crypt_keyslot_get_key_size
 libcryptsetup.so.12:crypt_keyslot_get_priority
 libcryptsetup.so.12:crypt_keyslot_max
 libcryptsetup.so.12:crypt_keyslot_set_priority
@@ -73,6 +76,7 @@ libcryptsetup.so.12:crypt_set_uuid
 libcryptsetup.so.12:crypt_status
 libcryptsetup.so.12:crypt_suspend
 libcryptsetup.so.12:crypt_token_assign_keyslot
+libcryptsetup.so.12:crypt_token_is_assigned
 libcryptsetup.so.12:crypt_token_json_get
 libcryptsetup.so.12:crypt_token_json_set
 libcryptsetup.so.12:crypt_token_luks2_keyring_get
