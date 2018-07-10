@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 2.0.3
-Release  : 33
+Release  : 34
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.3.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.3.tar.xz
 Summary  : cryptsetup library
