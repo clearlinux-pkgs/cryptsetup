@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 2.0.3
-Release  : 34
+Release  : 36
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.3.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.3.tar.xz
 Summary  : cryptsetup library
@@ -15,6 +15,7 @@ Requires: cryptsetup-bin
 Requires: cryptsetup-python3
 Requires: cryptsetup-config
 Requires: cryptsetup-lib
+Requires: cryptsetup-license
 Requires: cryptsetup-locales
 Requires: cryptsetup-man
 Requires: cryptsetup-python
@@ -39,6 +40,7 @@ WEB PAGE:
 Summary: bin components for the cryptsetup package.
 Group: Binaries
 Requires: cryptsetup-config
+Requires: cryptsetup-license
 Requires: cryptsetup-man
 
 %description bin
@@ -67,9 +69,18 @@ dev components for the cryptsetup package.
 %package lib
 Summary: lib components for the cryptsetup package.
 Group: Libraries
+Requires: cryptsetup-license
 
 %description lib
 lib components for the cryptsetup package.
+
+
+%package license
+Summary: license components for the cryptsetup package.
+Group: Default
+
+%description license
+license components for the cryptsetup package.
 
 
 %package locales
@@ -109,16 +120,31 @@ python3 components for the cryptsetup package.
 %prep
 %setup -q -n cryptsetup-2.0.3
 %patch1 -p1
+pushd ..
+cp -a cryptsetup-2.0.3 buildavx2
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1526836004
+export SOURCE_DATE_EPOCH=1531579466
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 %configure  --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 
+unset PKG_CONFIG_PATH
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=haswell"
+export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
+export LDFLAGS="$LDFLAGS -m64 -march=haswell"
+%configure  --enable-python --with-python_version=3 --enable-static --enable-pwquality   --libdir=/usr/lib64/haswell
+make  %{?_smp_mflags}
+popd
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
@@ -127,13 +153,21 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1526836004
+export SOURCE_DATE_EPOCH=1531579466
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/doc/cryptsetup
+cp COPYING.LGPL %{buildroot}/usr/share/doc/cryptsetup/COPYING.LGPL
+cp COPYING %{buildroot}/usr/share/doc/cryptsetup/COPYING
+cp lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/doc/cryptsetup/lib_crypto_backend_argon2_LICENSE
+pushd ../buildavx2/
+%make_install
+popd
 %make_install
 %find_lang cryptsetup
 
 %files
 %defattr(-,root,root,-)
+/usr/lib64/haswell/libcryptsetup.a
 
 %files bin
 %defattr(-,root,root,-)
@@ -150,13 +184,22 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/include/*.h
 /usr/lib64/*.a
+/usr/lib64/haswell/libcryptsetup.so
 /usr/lib64/libcryptsetup.so
 /usr/lib64/pkgconfig/libcryptsetup.pc
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/haswell/libcryptsetup.so.12
+/usr/lib64/haswell/libcryptsetup.so.12.3.0
 /usr/lib64/libcryptsetup.so.12
 /usr/lib64/libcryptsetup.so.12.3.0
+
+%files license
+%defattr(-,root,root,-)
+/usr/share/doc/cryptsetup/COPYING
+/usr/share/doc/cryptsetup/COPYING.LGPL
+/usr/share/doc/cryptsetup/lib_crypto_backend_argon2_LICENSE
 
 %files man
 %defattr(-,root,root,-)
