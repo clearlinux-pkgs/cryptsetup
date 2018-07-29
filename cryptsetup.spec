@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 2.0.3
-Release  : 36
+Release  : 37
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.3.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.3.tar.xz
 Summary  : cryptsetup library
@@ -21,6 +21,7 @@ Requires: cryptsetup-man
 Requires: cryptsetup-python
 Requires: LVM2
 Requires: LVM2-extras
+BuildRequires : keyutils-dev
 BuildRequires : libgcrypt-dev
 BuildRequires : libgpg-error-dev
 BuildRequires : pkgconfig(devmapper)
@@ -129,7 +130,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1531579466
+export SOURCE_DATE_EPOCH=1532889829
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
@@ -142,7 +143,7 @@ pushd ../buildavx2/
 export CFLAGS="$CFLAGS -m64 -march=haswell"
 export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
 export LDFLAGS="$LDFLAGS -m64 -march=haswell"
-%configure  --enable-python --with-python_version=3 --enable-static --enable-pwquality   --libdir=/usr/lib64/haswell
+%configure  --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 popd
 %check
@@ -153,26 +154,29 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1531579466
+export SOURCE_DATE_EPOCH=1532889829
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/cryptsetup
-cp COPYING.LGPL %{buildroot}/usr/share/doc/cryptsetup/COPYING.LGPL
 cp COPYING %{buildroot}/usr/share/doc/cryptsetup/COPYING
+cp COPYING.LGPL %{buildroot}/usr/share/doc/cryptsetup/COPYING.LGPL
 cp lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/doc/cryptsetup/lib_crypto_backend_argon2_LICENSE
 pushd ../buildavx2/
-%make_install
+%make_install_avx2
 popd
 %make_install
 %find_lang cryptsetup
 
 %files
 %defattr(-,root,root,-)
-/usr/lib64/haswell/libcryptsetup.a
 
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/cryptsetup
 /usr/bin/cryptsetup-reencrypt
+/usr/bin/haswell/cryptsetup
+/usr/bin/haswell/cryptsetup-reencrypt
+/usr/bin/haswell/integritysetup
+/usr/bin/haswell/veritysetup
 /usr/bin/integritysetup
 /usr/bin/veritysetup
 
