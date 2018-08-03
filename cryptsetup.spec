@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 2.0.3
-Release  : 37
-URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.3.tar.xz
-Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.3.tar.xz
+Version  : 2.0.4
+Release  : 38
+URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.4.tar.xz
+Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.4.tar.xz
 Summary  : cryptsetup library
 Group    : Development/Tools
 License  : CC0-1.0 GPL-2.0 LGPL-2.1
@@ -24,6 +24,7 @@ Requires: LVM2-extras
 BuildRequires : keyutils-dev
 BuildRequires : libgcrypt-dev
 BuildRequires : libgpg-error-dev
+BuildRequires : pkgconfig(blkid)
 BuildRequires : pkgconfig(devmapper)
 BuildRequires : pkgconfig(json-c)
 BuildRequires : pkgconfig(openssl)
@@ -119,10 +120,10 @@ python3 components for the cryptsetup package.
 
 
 %prep
-%setup -q -n cryptsetup-2.0.3
+%setup -q -n cryptsetup-2.0.4
 %patch1 -p1
 pushd ..
-cp -a cryptsetup-2.0.3 buildavx2
+cp -a cryptsetup-2.0.4 buildavx2
 popd
 
 %build
@@ -130,7 +131,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1532889829
+export SOURCE_DATE_EPOCH=1533308069
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
@@ -154,7 +155,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1532889829
+export SOURCE_DATE_EPOCH=1533308069
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/cryptsetup
 cp COPYING %{buildroot}/usr/share/doc/cryptsetup/COPYING
