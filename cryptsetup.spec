@@ -5,20 +5,20 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 2.0.4
-Release  : 39
+Release  : 40
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.4.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.4.tar.xz
 Summary  : cryptsetup library
 Group    : Development/Tools
 License  : CC0-1.0 GPL-2.0 LGPL-2.1
-Requires: cryptsetup-bin
-Requires: cryptsetup-python3
-Requires: cryptsetup-config
-Requires: cryptsetup-lib
-Requires: cryptsetup-license
-Requires: cryptsetup-locales
-Requires: cryptsetup-man
-Requires: cryptsetup-python
+Requires: cryptsetup-bin = %{version}-%{release}
+Requires: cryptsetup-config = %{version}-%{release}
+Requires: cryptsetup-lib = %{version}-%{release}
+Requires: cryptsetup-license = %{version}-%{release}
+Requires: cryptsetup-locales = %{version}-%{release}
+Requires: cryptsetup-man = %{version}-%{release}
+Requires: cryptsetup-python = %{version}-%{release}
+Requires: cryptsetup-python3 = %{version}-%{release}
 Requires: LVM2
 Requires: LVM2-extras
 BuildRequires : keyutils-dev
@@ -41,9 +41,9 @@ WEB PAGE:
 %package bin
 Summary: bin components for the cryptsetup package.
 Group: Binaries
-Requires: cryptsetup-config
-Requires: cryptsetup-license
-Requires: cryptsetup-man
+Requires: cryptsetup-config = %{version}-%{release}
+Requires: cryptsetup-license = %{version}-%{release}
+Requires: cryptsetup-man = %{version}-%{release}
 
 %description bin
 bin components for the cryptsetup package.
@@ -60,9 +60,9 @@ config components for the cryptsetup package.
 %package dev
 Summary: dev components for the cryptsetup package.
 Group: Development
-Requires: cryptsetup-lib
-Requires: cryptsetup-bin
-Provides: cryptsetup-devel
+Requires: cryptsetup-lib = %{version}-%{release}
+Requires: cryptsetup-bin = %{version}-%{release}
+Provides: cryptsetup-devel = %{version}-%{release}
 
 %description dev
 dev components for the cryptsetup package.
@@ -71,7 +71,7 @@ dev components for the cryptsetup package.
 %package lib
 Summary: lib components for the cryptsetup package.
 Group: Libraries
-Requires: cryptsetup-license
+Requires: cryptsetup-license = %{version}-%{release}
 
 %description lib
 lib components for the cryptsetup package.
@@ -104,7 +104,7 @@ man components for the cryptsetup package.
 %package python
 Summary: python components for the cryptsetup package.
 Group: Default
-Requires: cryptsetup-python3
+Requires: cryptsetup-python3 = %{version}-%{release}
 
 %description python
 python components for the cryptsetup package.
@@ -131,7 +131,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1536133794
+export SOURCE_DATE_EPOCH=1540747041
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
@@ -153,14 +153,16 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
+cd ../buildavx2;
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1536133794
+export SOURCE_DATE_EPOCH=1540747041
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/cryptsetup
-cp COPYING %{buildroot}/usr/share/doc/cryptsetup/COPYING
-cp COPYING.LGPL %{buildroot}/usr/share/doc/cryptsetup/COPYING.LGPL
-cp lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/doc/cryptsetup/lib_crypto_backend_argon2_LICENSE
+mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
+cp COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/COPYING
+cp COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/COPYING.LGPL
+cp lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/lib_crypto_backend_argon2_LICENSE
 pushd ../buildavx2/
 %make_install_avx2
 popd
@@ -201,13 +203,13 @@ popd
 /usr/lib64/libcryptsetup.so.12.3.0
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/cryptsetup/COPYING
-/usr/share/doc/cryptsetup/COPYING.LGPL
-/usr/share/doc/cryptsetup/lib_crypto_backend_argon2_LICENSE
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/cryptsetup/COPYING
+/usr/share/package-licenses/cryptsetup/COPYING.LGPL
+/usr/share/package-licenses/cryptsetup/lib_crypto_backend_argon2_LICENSE
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man8/cryptsetup-reencrypt.8
 /usr/share/man/man8/cryptsetup.8
 /usr/share/man/man8/integritysetup.8
