@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 2.0.5
-Release  : 43
-URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.5.tar.xz
-Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.5.tar.xz
+Version  : 2.0.6
+Release  : 44
+URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.6.tar.xz
+Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.6.tar.xz
 Summary  : cryptsetup library
 Group    : Development/Tools
 License  : CC0-1.0 GPL-2.0 LGPL-2.1
@@ -120,10 +120,10 @@ python3 components for the cryptsetup package.
 
 
 %prep
-%setup -q -n cryptsetup-2.0.5
+%setup -q -n cryptsetup-2.0.6
 %patch1 -p1
 pushd ..
-cp -a cryptsetup-2.0.5 buildavx2
+cp -a cryptsetup-2.0.6 buildavx2
 popd
 
 %build
@@ -131,7 +131,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1542392883
+export SOURCE_DATE_EPOCH=1543980807
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
@@ -157,7 +157,7 @@ cd ../buildavx2;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1542392883
+export SOURCE_DATE_EPOCH=1543980807
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
 cp COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/COPYING
