@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 2.0.6
-Release  : 46
-URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.6.tar.xz
-Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.6.tar.xz
+Version  : 2.1.0
+Release  : 47
+URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.1/cryptsetup-2.1.0.tar.xz
+Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.1/cryptsetup-2.1.0.tar.xz
 Summary  : cryptsetup library
 Group    : Development/Tools
 License  : CC0-1.0 GPL-2.0 LGPL-2.1
@@ -17,13 +17,9 @@ Requires: cryptsetup-lib = %{version}-%{release}
 Requires: cryptsetup-license = %{version}-%{release}
 Requires: cryptsetup-locales = %{version}-%{release}
 Requires: cryptsetup-man = %{version}-%{release}
-Requires: cryptsetup-python = %{version}-%{release}
-Requires: cryptsetup-python3 = %{version}-%{release}
 Requires: LVM2
 Requires: LVM2-extras
 BuildRequires : keyutils-dev
-BuildRequires : libgcrypt-dev
-BuildRequires : libgpg-error-dev
 BuildRequires : pkgconfig(blkid)
 BuildRequires : pkgconfig(devmapper)
 BuildRequires : pkgconfig(json-c)
@@ -31,7 +27,6 @@ BuildRequires : pkgconfig(openssl)
 BuildRequires : pkgconfig(pwquality)
 BuildRequires : popt-dev
 BuildRequires : python3-dev
-Patch1: 0001-pycryptsetup-test.py-change-python-interpreter.patch
 
 %description
 cryptsetup
@@ -43,7 +38,6 @@ Summary: bin components for the cryptsetup package.
 Group: Binaries
 Requires: cryptsetup-config = %{version}-%{release}
 Requires: cryptsetup-license = %{version}-%{release}
-Requires: cryptsetup-man = %{version}-%{release}
 
 %description bin
 bin components for the cryptsetup package.
@@ -101,29 +95,10 @@ Group: Default
 man components for the cryptsetup package.
 
 
-%package python
-Summary: python components for the cryptsetup package.
-Group: Default
-Requires: cryptsetup-python3 = %{version}-%{release}
-
-%description python
-python components for the cryptsetup package.
-
-
-%package python3
-Summary: python3 components for the cryptsetup package.
-Group: Default
-Requires: python3-core
-
-%description python3
-python3 components for the cryptsetup package.
-
-
 %prep
-%setup -q -n cryptsetup-2.0.6
-%patch1 -p1
+%setup -q -n cryptsetup-2.1.0
 pushd ..
-cp -a cryptsetup-2.0.6 buildavx2
+cp -a cryptsetup-2.1.0 buildavx2
 popd
 
 %build
@@ -131,12 +106,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1543980807
+export SOURCE_DATE_EPOCH=1554502670
+export LDFLAGS="${LDFLAGS} -fno-lto"
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-%configure  --enable-python --with-python_version=3 --enable-static --enable-pwquality
+%configure  --with-default-luks-format=LUKS1 --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 
 unset PKG_CONFIG_PATH
@@ -144,7 +120,7 @@ pushd ../buildavx2/
 export CFLAGS="$CFLAGS -m64 -march=haswell"
 export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
 export LDFLAGS="$LDFLAGS -m64 -march=haswell"
-%configure  --enable-python --with-python_version=3 --enable-static --enable-pwquality
+%configure  --with-default-luks-format=LUKS1 --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 popd
 %check
@@ -157,7 +133,7 @@ cd ../buildavx2;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1543980807
+export SOURCE_DATE_EPOCH=1554502670
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
 cp COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/COPYING
@@ -198,9 +174,9 @@ popd
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/haswell/libcryptsetup.so.12
-/usr/lib64/haswell/libcryptsetup.so.12.3.0
+/usr/lib64/haswell/libcryptsetup.so.12.4.0
 /usr/lib64/libcryptsetup.so.12
-/usr/lib64/libcryptsetup.so.12.3.0
+/usr/lib64/libcryptsetup.so.12.4.0
 
 %files license
 %defattr(0644,root,root,0755)
@@ -214,13 +190,6 @@ popd
 /usr/share/man/man8/cryptsetup.8
 /usr/share/man/man8/integritysetup.8
 /usr/share/man/man8/veritysetup.8
-
-%files python
-%defattr(-,root,root,-)
-
-%files python3
-%defattr(-,root,root,-)
-/usr/lib/python3*/*
 
 %files locales -f cryptsetup.lang
 %defattr(-,root,root,-)
