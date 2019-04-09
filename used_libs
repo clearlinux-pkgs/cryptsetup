@@ -1,7 +1,7 @@
 libblkid.so.1
 libc.so.6
-libcrypto.so.1.1
 libdevmapper.so.1.02
+libgcrypt.so.20
 libjson-c.so.4
 libpopt.so.0
 libpthread.so.0

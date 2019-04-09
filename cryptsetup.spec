@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 2.1.0
-Release  : 47
+Release  : 48
 URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.1/cryptsetup-2.1.0.tar.xz
 Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.1/cryptsetup-2.1.0.tar.xz
 Summary  : cryptsetup library
@@ -20,6 +20,8 @@ Requires: cryptsetup-man = %{version}-%{release}
 Requires: LVM2
 Requires: LVM2-extras
 BuildRequires : keyutils-dev
+BuildRequires : libgcrypt-dev
+BuildRequires : libgpg-error-dev
 BuildRequires : pkgconfig(blkid)
 BuildRequires : pkgconfig(devmapper)
 BuildRequires : pkgconfig(json-c)
@@ -57,6 +59,7 @@ Group: Development
 Requires: cryptsetup-lib = %{version}-%{release}
 Requires: cryptsetup-bin = %{version}-%{release}
 Provides: cryptsetup-devel = %{version}-%{release}
+Requires: cryptsetup = %{version}-%{release}
 
 %description dev
 dev components for the cryptsetup package.
@@ -95,6 +98,15 @@ Group: Default
 man components for the cryptsetup package.
 
 
+%package staticdev
+Summary: staticdev components for the cryptsetup package.
+Group: Default
+Requires: cryptsetup-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the cryptsetup package.
+
+
 %prep
 %setup -q -n cryptsetup-2.1.0
 pushd ..
@@ -106,13 +118,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1554502670
+export SOURCE_DATE_EPOCH=1554839417
 export LDFLAGS="${LDFLAGS} -fno-lto"
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-%configure  --with-default-luks-format=LUKS1 --enable-python --with-python_version=3 --enable-static --enable-pwquality
+%configure  --with-crypto_backend=gcrypt --with-default-luks-format=LUKS1 --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 
 unset PKG_CONFIG_PATH
@@ -120,7 +132,7 @@ pushd ../buildavx2/
 export CFLAGS="$CFLAGS -m64 -march=haswell"
 export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
 export LDFLAGS="$LDFLAGS -m64 -march=haswell"
-%configure  --with-default-luks-format=LUKS1 --enable-python --with-python_version=3 --enable-static --enable-pwquality
+%configure  --with-crypto_backend=gcrypt --with-default-luks-format=LUKS1 --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 popd
 %check
@@ -133,7 +145,7 @@ cd ../buildavx2;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1554502670
+export SOURCE_DATE_EPOCH=1554839417
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
 cp COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/COPYING
@@ -166,7 +178,6 @@ popd
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
-/usr/lib64/*.a
 /usr/lib64/haswell/libcryptsetup.so
 /usr/lib64/libcryptsetup.so
 /usr/lib64/pkgconfig/libcryptsetup.pc
@@ -190,6 +201,10 @@ popd
 /usr/share/man/man8/cryptsetup.8
 /usr/share/man/man8/integritysetup.8
 /usr/share/man/man8/veritysetup.8
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libcryptsetup.a
 
 %files locales -f cryptsetup.lang
 %defattr(-,root,root,-)
