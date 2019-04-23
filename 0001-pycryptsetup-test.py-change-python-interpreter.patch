@@ -1,0 +1,25 @@
+From a81b209959693ec95ee0e45b89ebf5cf4aafbd5f Mon Sep 17 00:00:00 2001
+From: Josue David Hernandez <josue.d.hernandez.gutierrez@intel.com>
+Date: Tue, 31 Oct 2017 18:43:44 -0600
+Subject: [PATCH] pycryptsetup-test.py: change python interpreter
+
+change python2 to python3
+
+Signed-off-by: Josue David Hernandez <josue.d.hernandez.gutierrez@intel.com>
+---
+ python/pycryptsetup-test.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/pycryptsetup-test.py b/python/pycryptsetup-test.py
+index 8e65088..3f57c1c 100755
+--- a/python/pycryptsetup-test.py
++++ b/python/pycryptsetup-test.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ #
+ # Python bindings to libcryptsetup test
+ #
+-- 
+2.14.2
+

@@ -1,1 +1,1 @@
---with-crypto_backend=gcrypt --with-default-luks-format=LUKS1 --enable-python --with-python_version=3 --enable-static --enable-pwquality
+--with-crypto_backend=gcrypt --enable-python --with-python_version=3 --enable-static --enable-pwquality
