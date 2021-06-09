@@ -1,4 +1,6 @@
-Configure miss: key_serial_t
+Configure miss: if internal cryptsetup PBKDF2 is compiled-in
 Configure miss: if internal cryptsetup PBKDF2 is compiled-in
 Configure miss: key_serial_t
-Configure miss: if internal cryptsetup PBKDF2 is compiled-in
+Configure miss: key_serial_t
+Configure miss: whether DM_DEVICE_GET_TARGET_VERSION is declared
+Configure miss: whether DM_DEVICE_GET_TARGET_VERSION is declared

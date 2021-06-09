@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 2.0.6
-Release  : 62
-URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.6.tar.xz
-Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/cryptsetup-2.0.6.tar.xz
+Version  : 2.3.6
+Release  : 63
+URL      : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/cryptsetup-2.3.6.tar.xz
+Source0  : https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/cryptsetup-2.3.6.tar.xz
 Summary  : cryptsetup library
 Group    : Development/Tools
 License  : CC0-1.0 GPL-2.0 LGPL-2.1
@@ -17,13 +17,11 @@ Requires: cryptsetup-lib = %{version}-%{release}
 Requires: cryptsetup-license = %{version}-%{release}
 Requires: cryptsetup-locales = %{version}-%{release}
 Requires: cryptsetup-man = %{version}-%{release}
-Requires: cryptsetup-python = %{version}-%{release}
-Requires: cryptsetup-python3 = %{version}-%{release}
 Requires: LVM2
 Requires: LVM2-extras
+BuildRequires : LVM2
 BuildRequires : keyutils-dev
 BuildRequires : libgcrypt-dev
-BuildRequires : libgpg-error-dev
 BuildRequires : pkgconfig(blkid)
 BuildRequires : pkgconfig(devmapper)
 BuildRequires : pkgconfig(json-c)
@@ -31,7 +29,6 @@ BuildRequires : pkgconfig(openssl)
 BuildRequires : pkgconfig(pwquality)
 BuildRequires : popt-dev
 BuildRequires : python3-dev
-Patch1: 0001-pycryptsetup-test.py-change-python-interpreter.patch
 
 %description
 cryptsetup
@@ -101,24 +98,6 @@ Group: Default
 man components for the cryptsetup package.
 
 
-%package python
-Summary: python components for the cryptsetup package.
-Group: Default
-Requires: cryptsetup-python3 = %{version}-%{release}
-
-%description python
-python components for the cryptsetup package.
-
-
-%package python3
-Summary: python3 components for the cryptsetup package.
-Group: Default
-Requires: python3-core
-
-%description python3
-python3 components for the cryptsetup package.
-
-
 %package staticdev
 Summary: staticdev components for the cryptsetup package.
 Group: Default
@@ -129,23 +108,23 @@ staticdev components for the cryptsetup package.
 
 
 %prep
-%setup -q -n cryptsetup-2.0.6
-%patch1 -p1
+%setup -q -n cryptsetup-2.3.6
+cd %{_builddir}/cryptsetup-2.3.6
 pushd ..
-cp -a cryptsetup-2.0.6 buildavx2
+cp -a cryptsetup-2.3.6 buildavx2
 popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1556042832
-export LDFLAGS="${LDFLAGS} -fno-lto"
-export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1623278132
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-lto -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export FCFLAGS="$FFLAGS -O3 -falign-functions=32 -fno-lto -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export FFLAGS="$FFLAGS -O3 -falign-functions=32 -fno-lto -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-lto -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 %configure  --with-crypto_backend=gcrypt --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 
@@ -153,31 +132,35 @@ unset PKG_CONFIG_PATH
 pushd ../buildavx2/
 export CFLAGS="$CFLAGS -m64 -march=haswell"
 export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
+export FFLAGS="$FFLAGS -m64 -march=haswell"
+export FCFLAGS="$FCFLAGS -m64 -march=haswell"
 export LDFLAGS="$LDFLAGS -m64 -march=haswell"
 %configure  --with-crypto_backend=gcrypt --enable-python --with-python_version=3 --enable-static --enable-pwquality
 make  %{?_smp_mflags}
 popd
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 cd ../buildavx2;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1556042832
+export SOURCE_DATE_EPOCH=1623278132
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
-cp COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/COPYING
-cp COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/COPYING.LGPL
-cp lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/lib_crypto_backend_argon2_LICENSE
+cp %{_builddir}/cryptsetup-2.3.6/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
+cp %{_builddir}/cryptsetup-2.3.6/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
+cp %{_builddir}/cryptsetup-2.3.6/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
 pushd ../buildavx2/
 %make_install_avx2
 popd
 %make_install
 %find_lang cryptsetup
+## Remove excluded files
+rm -f %{buildroot}/usr/lib64/haswell/libcryptsetup.a
 
 %files
 %defattr(-,root,root,-)
@@ -199,7 +182,7 @@ popd
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/*.h
+/usr/include/libcryptsetup.h
 /usr/lib64/haswell/libcryptsetup.so
 /usr/lib64/libcryptsetup.so
 /usr/lib64/pkgconfig/libcryptsetup.pc
@@ -207,15 +190,15 @@ popd
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/haswell/libcryptsetup.so.12
-/usr/lib64/haswell/libcryptsetup.so.12.3.0
+/usr/lib64/haswell/libcryptsetup.so.12.6.0
 /usr/lib64/libcryptsetup.so.12
-/usr/lib64/libcryptsetup.so.12.3.0
+/usr/lib64/libcryptsetup.so.12.6.0
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/cryptsetup/COPYING
-/usr/share/package-licenses/cryptsetup/COPYING.LGPL
-/usr/share/package-licenses/cryptsetup/lib_crypto_backend_argon2_LICENSE
+/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
+/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
+/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
 
 %files man
 %defattr(0644,root,root,0755)
@@ -223,13 +206,6 @@ popd
 /usr/share/man/man8/cryptsetup.8
 /usr/share/man/man8/integritysetup.8
 /usr/share/man/man8/veritysetup.8
-
-%files python
-%defattr(-,root,root,-)
-
-%files python3
-%defattr(-,root,root,-)
-/usr/lib/python3*/*
 
 %files staticdev
 %defattr(-,root,root,-)

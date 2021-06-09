@@ -1,14 +1,9 @@
 libblkid.so.1
 libc.so.6
-libcrypt.so.1
 libdevmapper.so.1.02
-libdl.so.2
 libgcrypt.so.20
 libjson-c.so.4
-libm.so.6
 libpopt.so.0
 libpthread.so.0
 libpwquality.so.1
-libpython3.7m.so.1.0
-libutil.so.1
 libuuid.so.1
