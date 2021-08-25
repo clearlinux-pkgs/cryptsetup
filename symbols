@@ -1,4 +1,5 @@
 libcryptsetup.so.12:CRYPTSETUP_2.0
+libcryptsetup.so.12:CRYPTSETUP_2.4
 libcryptsetup.so.12:crypt_activate_by_keyfile
 libcryptsetup.so.12:crypt_activate_by_keyfile_device_offset
 libcryptsetup.so.12:crypt_activate_by_keyfile_offset
@@ -6,6 +7,7 @@ libcryptsetup.so.12:crypt_activate_by_keyring
 libcryptsetup.so.12:crypt_activate_by_passphrase
 libcryptsetup.so.12:crypt_activate_by_signed_key
 libcryptsetup.so.12:crypt_activate_by_token
+libcryptsetup.so.12:crypt_activate_by_token_pin
 libcryptsetup.so.12:crypt_activate_by_volume_key
 libcryptsetup.so.12:crypt_benchmark
 libcryptsetup.so.12:crypt_benchmark_pbkdf
@@ -13,6 +15,7 @@ libcryptsetup.so.12:crypt_convert
 libcryptsetup.so.12:crypt_deactivate
 libcryptsetup.so.12:crypt_deactivate_by_name
 libcryptsetup.so.12:crypt_dump
+libcryptsetup.so.12:crypt_dump_json
 libcryptsetup.so.12:crypt_format
 libcryptsetup.so.12:crypt_free
 libcryptsetup.so.12:crypt_get_active_device
@@ -38,6 +41,7 @@ libcryptsetup.so.12:crypt_get_uuid
 libcryptsetup.so.12:crypt_get_verity_info
 libcryptsetup.so.12:crypt_get_volume_key_size
 libcryptsetup.so.12:crypt_header_backup
+libcryptsetup.so.12:crypt_header_is_detached
 libcryptsetup.so.12:crypt_header_restore
 libcryptsetup.so.12:crypt_init
 libcryptsetup.so.12:crypt_init_by_name
@@ -64,6 +68,7 @@ libcryptsetup.so.12:crypt_keyslot_set_priority
 libcryptsetup.so.12:crypt_keyslot_status
 libcryptsetup.so.12:crypt_load
 libcryptsetup.so.12:crypt_log
+libcryptsetup.so.12:crypt_logf
 libcryptsetup.so.12:crypt_memory_lock
 libcryptsetup.so.12:crypt_metadata_locking
 libcryptsetup.so.12:crypt_persistent_flags_get
@@ -71,6 +76,7 @@ libcryptsetup.so.12:crypt_persistent_flags_set
 libcryptsetup.so.12:crypt_reencrypt
 libcryptsetup.so.12:crypt_reencrypt_init_by_keyring
 libcryptsetup.so.12:crypt_reencrypt_init_by_passphrase
+libcryptsetup.so.12:crypt_reencrypt_run
 libcryptsetup.so.12:crypt_reencrypt_status
 libcryptsetup.so.12:crypt_repair
 libcryptsetup.so.12:crypt_resize
@@ -98,11 +104,14 @@ libcryptsetup.so.12:crypt_set_uuid
 libcryptsetup.so.12:crypt_status
 libcryptsetup.so.12:crypt_suspend
 libcryptsetup.so.12:crypt_token_assign_keyslot
+libcryptsetup.so.12:crypt_token_external_disable
+libcryptsetup.so.12:crypt_token_external_path
 libcryptsetup.so.12:crypt_token_is_assigned
 libcryptsetup.so.12:crypt_token_json_get
 libcryptsetup.so.12:crypt_token_json_set
 libcryptsetup.so.12:crypt_token_luks2_keyring_get
 libcryptsetup.so.12:crypt_token_luks2_keyring_set
+libcryptsetup.so.12:crypt_token_max
 libcryptsetup.so.12:crypt_token_register
 libcryptsetup.so.12:crypt_token_status
 libcryptsetup.so.12:crypt_token_unassign_keyslot

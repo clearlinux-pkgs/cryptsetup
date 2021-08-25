@@ -4,13 +4,13 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 2.3.6
-Release  : 63
-URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.3/cryptsetup-2.3.6.tar.xz
-Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.3/cryptsetup-2.3.6.tar.xz
-Summary  : cryptsetup library
+Version  : 2.4.0
+Release  : 64
+URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.0.tar.xz
+Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.0.tar.xz
+Summary  : Utility for setting up encrypted disks
 Group    : Development/Tools
-License  : CC0-1.0 GPL-2.0 LGPL-2.1
+License  : CC0-1.0 GPL-2.0 GPL-2.0+ LGPL-2.1 LGPL-2.1+
 Requires: cryptsetup-bin = %{version}-%{release}
 Requires: cryptsetup-config = %{version}-%{release}
 Requires: cryptsetup-lib = %{version}-%{release}
@@ -31,9 +31,8 @@ BuildRequires : popt-dev
 BuildRequires : python3-dev
 
 %description
-cryptsetup
-setup cryptographic volumes for dm-crypt (including LUKS extension)
-WEB PAGE:
+The cryptsetup package contains a utility for setting up
+disk encryption using dm-crypt kernel module.
 
 %package bin
 Summary: bin components for the cryptsetup package.
@@ -108,10 +107,10 @@ staticdev components for the cryptsetup package.
 
 
 %prep
-%setup -q -n cryptsetup-2.3.6
-cd %{_builddir}/cryptsetup-2.3.6
+%setup -q -n cryptsetup-2.4.0
+cd %{_builddir}/cryptsetup-2.4.0
 pushd ..
-cp -a cryptsetup-2.3.6 buildavx2
+cp -a cryptsetup-2.4.0 buildavx2
 popd
 
 %build
@@ -119,13 +118,18 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1623278132
+export SOURCE_DATE_EPOCH=1629850179
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-lto -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-export FCFLAGS="$FFLAGS -O3 -falign-functions=32 -fno-lto -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-export FFLAGS="$FFLAGS -O3 -falign-functions=32 -fno-lto -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-lto -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
-%configure  --with-crypto_backend=gcrypt --enable-python --with-python_version=3 --enable-static --enable-pwquality
+export CFLAGS="$CFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
+export FCFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
+export FFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
+export CXXFLAGS="$CXXFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
+%configure  --with-crypto_backend=gcrypt \
+--enable-python \
+--with-python_version=3 \
+--enable-static \
+--enable-pwquality \
+--disable-ssh-token
 make  %{?_smp_mflags}
 
 unset PKG_CONFIG_PATH
@@ -135,7 +139,12 @@ export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
 export FFLAGS="$FFLAGS -m64 -march=haswell"
 export FCFLAGS="$FCFLAGS -m64 -march=haswell"
 export LDFLAGS="$LDFLAGS -m64 -march=haswell"
-%configure  --with-crypto_backend=gcrypt --enable-python --with-python_version=3 --enable-static --enable-pwquality
+%configure  --with-crypto_backend=gcrypt \
+--enable-python \
+--with-python_version=3 \
+--enable-static \
+--enable-pwquality \
+--disable-ssh-token
 make  %{?_smp_mflags}
 popd
 %check
@@ -148,12 +157,12 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1623278132
+export SOURCE_DATE_EPOCH=1629850179
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
-cp %{_builddir}/cryptsetup-2.3.6/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
-cp %{_builddir}/cryptsetup-2.3.6/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
-cp %{_builddir}/cryptsetup-2.3.6/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
+cp %{_builddir}/cryptsetup-2.4.0/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
+cp %{_builddir}/cryptsetup-2.4.0/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
+cp %{_builddir}/cryptsetup-2.4.0/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
 pushd ../buildavx2/
 %make_install_avx2
 popd
@@ -190,9 +199,9 @@ rm -f %{buildroot}/usr/lib64/haswell/libcryptsetup.a
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/haswell/libcryptsetup.so.12
-/usr/lib64/haswell/libcryptsetup.so.12.6.0
+/usr/lib64/haswell/libcryptsetup.so.12.7.0
 /usr/lib64/libcryptsetup.so.12
-/usr/lib64/libcryptsetup.so.12.6.0
+/usr/lib64/libcryptsetup.so.12.7.0
 
 %files license
 %defattr(0644,root,root,0755)
