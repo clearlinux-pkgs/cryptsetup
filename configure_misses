@@ -1,3 +1,5 @@
+Configure miss: gcc options needed to detect all undeclared functions
+Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: if internal cryptsetup PBKDF2 is compiled-in
 Configure miss: if internal cryptsetup PBKDF2 is compiled-in
 Configure miss: key_serial_t

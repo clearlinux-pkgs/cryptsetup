@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 2.4.0
-Release  : 64
-URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.0.tar.xz
-Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.0.tar.xz
+Version  : 2.4.1
+Release  : 65
+URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.1.tar.xz
+Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.1.tar.xz
 Summary  : Utility for setting up encrypted disks
 Group    : Development/Tools
 License  : CC0-1.0 GPL-2.0 GPL-2.0+ LGPL-2.1 LGPL-2.1+
@@ -107,10 +107,10 @@ staticdev components for the cryptsetup package.
 
 
 %prep
-%setup -q -n cryptsetup-2.4.0
-cd %{_builddir}/cryptsetup-2.4.0
+%setup -q -n cryptsetup-2.4.1
+cd %{_builddir}/cryptsetup-2.4.1
 pushd ..
-cp -a cryptsetup-2.4.0 buildavx2
+cp -a cryptsetup-2.4.1 buildavx2
 popd
 
 %build
@@ -118,7 +118,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1629850179
+export SOURCE_DATE_EPOCH=1631731230
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
 export FCFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
@@ -157,12 +157,12 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1629850179
+export SOURCE_DATE_EPOCH=1631731230
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
-cp %{_builddir}/cryptsetup-2.4.0/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
-cp %{_builddir}/cryptsetup-2.4.0/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
-cp %{_builddir}/cryptsetup-2.4.0/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
+cp %{_builddir}/cryptsetup-2.4.1/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
+cp %{_builddir}/cryptsetup-2.4.1/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
+cp %{_builddir}/cryptsetup-2.4.1/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
 pushd ../buildavx2/
 %make_install_avx2
 popd
