@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 2.4.1
-Release  : 65
+Release  : 66
 URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.1.tar.xz
 Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.1.tar.xz
 Summary  : Utility for setting up encrypted disks
@@ -13,6 +13,7 @@ Group    : Development/Tools
 License  : CC0-1.0 GPL-2.0 GPL-2.0+ LGPL-2.1 LGPL-2.1+
 Requires: cryptsetup-bin = %{version}-%{release}
 Requires: cryptsetup-config = %{version}-%{release}
+Requires: cryptsetup-filemap = %{version}-%{release}
 Requires: cryptsetup-lib = %{version}-%{release}
 Requires: cryptsetup-license = %{version}-%{release}
 Requires: cryptsetup-locales = %{version}-%{release}
@@ -39,6 +40,7 @@ Summary: bin components for the cryptsetup package.
 Group: Binaries
 Requires: cryptsetup-config = %{version}-%{release}
 Requires: cryptsetup-license = %{version}-%{release}
+Requires: cryptsetup-filemap = %{version}-%{release}
 
 %description bin
 bin components for the cryptsetup package.
@@ -64,10 +66,19 @@ Requires: cryptsetup = %{version}-%{release}
 dev components for the cryptsetup package.
 
 
+%package filemap
+Summary: filemap components for the cryptsetup package.
+Group: Default
+
+%description filemap
+filemap components for the cryptsetup package.
+
+
 %package lib
 Summary: lib components for the cryptsetup package.
 Group: Libraries
 Requires: cryptsetup-license = %{version}-%{release}
+Requires: cryptsetup-filemap = %{version}-%{release}
 
 %description lib
 lib components for the cryptsetup package.
@@ -118,7 +129,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1631731230
+export SOURCE_DATE_EPOCH=1633739027
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
 export FCFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
@@ -134,11 +145,11 @@ make  %{?_smp_mflags}
 
 unset PKG_CONFIG_PATH
 pushd ../buildavx2/
-export CFLAGS="$CFLAGS -m64 -march=haswell"
-export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
-export FFLAGS="$FFLAGS -m64 -march=haswell"
-export FCFLAGS="$FCFLAGS -m64 -march=haswell"
-export LDFLAGS="$LDFLAGS -m64 -march=haswell"
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v3"
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3"
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v3"
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3"
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
 %configure  --with-crypto_backend=gcrypt \
 --enable-python \
 --with-python_version=3 \
@@ -157,14 +168,15 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1631731230
+export SOURCE_DATE_EPOCH=1633739027
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
 cp %{_builddir}/cryptsetup-2.4.1/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
 cp %{_builddir}/cryptsetup-2.4.1/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
 cp %{_builddir}/cryptsetup-2.4.1/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
 pushd ../buildavx2/
-%make_install_avx2
+%make_install_v3
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 popd
 %make_install
 %find_lang cryptsetup
@@ -178,12 +190,9 @@ rm -f %{buildroot}/usr/lib64/haswell/libcryptsetup.a
 %defattr(-,root,root,-)
 /usr/bin/cryptsetup
 /usr/bin/cryptsetup-reencrypt
-/usr/bin/haswell/cryptsetup
-/usr/bin/haswell/cryptsetup-reencrypt
-/usr/bin/haswell/integritysetup
-/usr/bin/haswell/veritysetup
 /usr/bin/integritysetup
 /usr/bin/veritysetup
+/usr/share/clear/optimized-elf/bin*
 
 %files config
 %defattr(-,root,root,-)
@@ -192,16 +201,18 @@ rm -f %{buildroot}/usr/lib64/haswell/libcryptsetup.a
 %files dev
 %defattr(-,root,root,-)
 /usr/include/libcryptsetup.h
-/usr/lib64/haswell/libcryptsetup.so
 /usr/lib64/libcryptsetup.so
 /usr/lib64/pkgconfig/libcryptsetup.pc
 
+%files filemap
+%defattr(-,root,root,-)
+/usr/share/clear/filemap/filemap-cryptsetup
+
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/haswell/libcryptsetup.so.12
-/usr/lib64/haswell/libcryptsetup.so.12.7.0
 /usr/lib64/libcryptsetup.so.12
 /usr/lib64/libcryptsetup.so.12.7.0
+/usr/share/clear/optimized-elf/lib*
 
 %files license
 %defattr(0644,root,root,0755)
