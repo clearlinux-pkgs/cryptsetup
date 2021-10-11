@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : cryptsetup
 Version  : 2.4.1
-Release  : 66
+Release  : 67
 URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.1.tar.xz
 Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.1.tar.xz
 Summary  : Utility for setting up encrypted disks
