@@ -2,7 +2,7 @@ libblkid.so.1
 libc.so.6
 libdevmapper.so.1.02
 libgcrypt.so.20
-libjson-c.so.4
+libjson-c.so.5
 libpopt.so.0
 libpwquality.so.1
 libuuid.so.1
