@@ -4,13 +4,13 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 2.4.3
-Release  : 80
-URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.3.tar.xz
-Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.4/cryptsetup-2.4.3.tar.xz
+Version  : 2.5.0
+Release  : 81
+URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.5/cryptsetup-2.5.0.tar.xz
+Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.5/cryptsetup-2.5.0.tar.xz
 Summary  : Utility for setting up encrypted disks
 Group    : Development/Tools
-License  : CC0-1.0 GPL-2.0 GPL-2.0+ LGPL-2.1 LGPL-2.1+
+License  : CC0-1.0 GPL-2.0 GPL-2.0+ LGPL-2.0+ LGPL-2.1
 Requires: cryptsetup-bin = %{version}-%{release}
 Requires: cryptsetup-config = %{version}-%{release}
 Requires: cryptsetup-filemap = %{version}-%{release}
@@ -117,10 +117,10 @@ staticdev components for the cryptsetup package.
 
 
 %prep
-%setup -q -n cryptsetup-2.4.3
-cd %{_builddir}/cryptsetup-2.4.3
+%setup -q -n cryptsetup-2.5.0
+cd %{_builddir}/cryptsetup-2.5.0
 pushd ..
-cp -a cryptsetup-2.4.3 buildavx2
+cp -a cryptsetup-2.5.0 buildavx2
 popd
 
 %build
@@ -128,7 +128,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656099853
+export SOURCE_DATE_EPOCH=1665512026
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
 export FCFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=256 "
@@ -139,7 +139,8 @@ export CXXFLAGS="$CXXFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-in
 --with-python_version=3 \
 --enable-static \
 --enable-pwquality \
---disable-ssh-token
+--disable-ssh-token \
+--disable-asciidoc
 make  %{?_smp_mflags}
 
 unset PKG_CONFIG_PATH
@@ -154,7 +155,8 @@ export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
 --with-python_version=3 \
 --enable-static \
 --enable-pwquality \
---disable-ssh-token
+--disable-ssh-token \
+--disable-asciidoc
 make  %{?_smp_mflags}
 popd
 %check
@@ -162,17 +164,17 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make %{?_smp_mflags} check
-cd ../buildavx2;
 make %{?_smp_mflags} check || :
+cd ../buildavx2;
+make %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1656099853
+export SOURCE_DATE_EPOCH=1665512026
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
-cp %{_builddir}/cryptsetup-2.4.3/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
-cp %{_builddir}/cryptsetup-2.4.3/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
-cp %{_builddir}/cryptsetup-2.4.3/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
+cp %{_builddir}/cryptsetup-%{version}/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
+cp %{_builddir}/cryptsetup-%{version}/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
+cp %{_builddir}/cryptsetup-%{version}/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
 pushd ../buildavx2/
 %make_install_v3
 popd
@@ -188,7 +190,6 @@ rm -f %{buildroot}*/usr/lib64/haswell/libcryptsetup.a
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/cryptsetup
-/usr/bin/cryptsetup-reencrypt
 /usr/bin/integritysetup
 /usr/bin/veritysetup
 /usr/share/clear/optimized-elf/bin*
@@ -200,6 +201,7 @@ rm -f %{buildroot}*/usr/lib64/haswell/libcryptsetup.a
 %files dev
 %defattr(-,root,root,-)
 /usr/include/libcryptsetup.h
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcryptsetup.so
 /usr/lib64/libcryptsetup.so
 /usr/lib64/pkgconfig/libcryptsetup.pc
 
@@ -209,11 +211,10 @@ rm -f %{buildroot}*/usr/lib64/haswell/libcryptsetup.a
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/glibc-hwcaps/x86-64-v3/libcryptsetup.so
 /usr/lib64/glibc-hwcaps/x86-64-v3/libcryptsetup.so.12
-/usr/lib64/glibc-hwcaps/x86-64-v3/libcryptsetup.so.12.7.0
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcryptsetup.so.12.8.0
 /usr/lib64/libcryptsetup.so.12
-/usr/lib64/libcryptsetup.so.12.7.0
+/usr/lib64/libcryptsetup.so.12.8.0
 
 %files license
 %defattr(0644,root,root,0755)
@@ -223,13 +224,47 @@ rm -f %{buildroot}*/usr/lib64/haswell/libcryptsetup.a
 
 %files man
 %defattr(0644,root,root,0755)
+/usr/share/man/man8/cryptsetup-benchmark.8
+/usr/share/man/man8/cryptsetup-bitlkDump.8
+/usr/share/man/man8/cryptsetup-bitlkOpen.8
+/usr/share/man/man8/cryptsetup-close.8
+/usr/share/man/man8/cryptsetup-config.8
+/usr/share/man/man8/cryptsetup-convert.8
+/usr/share/man/man8/cryptsetup-create.8
+/usr/share/man/man8/cryptsetup-erase.8
+/usr/share/man/man8/cryptsetup-isLuks.8
+/usr/share/man/man8/cryptsetup-loopaesOpen.8
+/usr/share/man/man8/cryptsetup-luksAddKey.8
+/usr/share/man/man8/cryptsetup-luksChangeKey.8
+/usr/share/man/man8/cryptsetup-luksConvertKey.8
+/usr/share/man/man8/cryptsetup-luksDump.8
+/usr/share/man/man8/cryptsetup-luksErase.8
+/usr/share/man/man8/cryptsetup-luksFormat.8
+/usr/share/man/man8/cryptsetup-luksHeaderBackup.8
+/usr/share/man/man8/cryptsetup-luksHeaderRestore.8
+/usr/share/man/man8/cryptsetup-luksKillSlot.8
+/usr/share/man/man8/cryptsetup-luksOpen.8
+/usr/share/man/man8/cryptsetup-luksRemoveKey.8
+/usr/share/man/man8/cryptsetup-luksResume.8
+/usr/share/man/man8/cryptsetup-luksSuspend.8
+/usr/share/man/man8/cryptsetup-luksUUID.8
+/usr/share/man/man8/cryptsetup-open.8
+/usr/share/man/man8/cryptsetup-plainOpen.8
 /usr/share/man/man8/cryptsetup-reencrypt.8
+/usr/share/man/man8/cryptsetup-refresh.8
+/usr/share/man/man8/cryptsetup-repair.8
+/usr/share/man/man8/cryptsetup-resize.8
+/usr/share/man/man8/cryptsetup-status.8
+/usr/share/man/man8/cryptsetup-tcryptDump.8
+/usr/share/man/man8/cryptsetup-tcryptOpen.8
+/usr/share/man/man8/cryptsetup-token.8
 /usr/share/man/man8/cryptsetup.8
 /usr/share/man/man8/integritysetup.8
 /usr/share/man/man8/veritysetup.8
 
 %files staticdev
 %defattr(-,root,root,-)
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcryptsetup.a
 /usr/lib64/libcryptsetup.a
 
 %files locales -f cryptsetup.lang

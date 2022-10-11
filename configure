@@ -4,3 +4,4 @@
 --enable-static
 --enable-pwquality
 --disable-ssh-token
+--disable-asciidoc
