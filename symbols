@@ -1,6 +1,7 @@
 libcryptsetup.so.12:CRYPTSETUP_2.0
 libcryptsetup.so.12:CRYPTSETUP_2.4
 libcryptsetup.so.12:CRYPTSETUP_2.5
+libcryptsetup.so.12:CRYPTSETUP_2.6
 libcryptsetup.so.12:crypt_activate_by_keyfile
 libcryptsetup.so.12:crypt_activate_by_keyfile_device_offset
 libcryptsetup.so.12:crypt_activate_by_keyfile_offset
@@ -56,10 +57,19 @@ libcryptsetup.so.12:crypt_keyslot_add_by_key
 libcryptsetup.so.12:crypt_keyslot_add_by_keyfile
 libcryptsetup.so.12:crypt_keyslot_add_by_keyfile_device_offset
 libcryptsetup.so.12:crypt_keyslot_add_by_keyfile_offset
+libcryptsetup.so.12:crypt_keyslot_add_by_keyslot_context
 libcryptsetup.so.12:crypt_keyslot_add_by_passphrase
 libcryptsetup.so.12:crypt_keyslot_add_by_volume_key
 libcryptsetup.so.12:crypt_keyslot_area
 libcryptsetup.so.12:crypt_keyslot_change_by_passphrase
+libcryptsetup.so.12:crypt_keyslot_context_free
+libcryptsetup.so.12:crypt_keyslot_context_get_error
+libcryptsetup.so.12:crypt_keyslot_context_get_type
+libcryptsetup.so.12:crypt_keyslot_context_init_by_keyfile
+libcryptsetup.so.12:crypt_keyslot_context_init_by_passphrase
+libcryptsetup.so.12:crypt_keyslot_context_init_by_token
+libcryptsetup.so.12:crypt_keyslot_context_init_by_volume_key
+libcryptsetup.so.12:crypt_keyslot_context_set_pin
 libcryptsetup.so.12:crypt_keyslot_destroy
 libcryptsetup.so.12:crypt_keyslot_get_encryption
 libcryptsetup.so.12:crypt_keyslot_get_key_size
@@ -120,6 +130,7 @@ libcryptsetup.so.12:crypt_token_register
 libcryptsetup.so.12:crypt_token_status
 libcryptsetup.so.12:crypt_token_unassign_keyslot
 libcryptsetup.so.12:crypt_volume_key_get
+libcryptsetup.so.12:crypt_volume_key_get_by_keyslot_context
 libcryptsetup.so.12:crypt_volume_key_keyring
 libcryptsetup.so.12:crypt_volume_key_verify
 libcryptsetup.so.12:crypt_wipe

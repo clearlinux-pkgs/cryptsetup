@@ -1,12 +1,12 @@
 Configure miss: asciidoctor
 Configure miss: asciidoctor
+Configure miss: g++ option to enable C++11 features
+Configure miss: g++ option to enable C++11 features
 Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: if internal cryptsetup PBKDF2 is compiled-in
 Configure miss: if internal cryptsetup PBKDF2 is compiled-in
 Configure miss: key_serial_t
 Configure miss: key_serial_t
-Configure miss: whether DM_DEVICE_GET_TARGET_VERSION is declared
-Configure miss: whether DM_DEVICE_GET_TARGET_VERSION is declared
 Configure miss: x86_64-generic-linux-gnu-file
 Configure miss: x86_64-generic-linux-gnu-file
