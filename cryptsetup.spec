@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : cryptsetup
-Version  : 2.6.0
-Release  : 83
-URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.6/cryptsetup-2.6.0.tar.xz
-Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.6/cryptsetup-2.6.0.tar.xz
+Version  : 2.6.1
+Release  : 84
+URL      : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.6/cryptsetup-2.6.1.tar.xz
+Source0  : https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.6/cryptsetup-2.6.1.tar.xz
 Summary  : Utility for setting up encrypted disks
 Group    : Development/Tools
 License  : CC0-1.0 GPL-2.0 GPL-2.0+ LGPL-2.0+ LGPL-2.1
@@ -29,6 +29,9 @@ BuildRequires : pkgconfig(openssl)
 BuildRequires : pkgconfig(pwquality)
 BuildRequires : popt-dev
 BuildRequires : python3-dev
+# Suppress stripping binaries
+%define __strip /bin/true
+%define debug_package %{nil}
 
 %description
 The cryptsetup package contains a utility for setting up
@@ -117,10 +120,10 @@ staticdev components for the cryptsetup package.
 
 
 %prep
-%setup -q -n cryptsetup-2.6.0
-cd %{_builddir}/cryptsetup-2.6.0
+%setup -q -n cryptsetup-2.6.1
+cd %{_builddir}/cryptsetup-2.6.1
 pushd ..
-cp -a cryptsetup-2.6.0 buildavx2
+cp -a cryptsetup-2.6.1 buildavx2
 popd
 
 %build
@@ -128,12 +131,12 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1672168717
+export SOURCE_DATE_EPOCH=1675973885
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=512 "
-export FCFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=512 "
-export FFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=512 "
-export CXXFLAGS="$CXXFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mprefer-vector-width=512 "
+export CFLAGS="$CFLAGS -Ofast -falign-functions=32 -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -fno-semantic-interposition -g1 -gno-column-info -gno-variable-location-views -gz "
+export FCFLAGS="$FFLAGS -Ofast -falign-functions=32 -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -fno-semantic-interposition -g1 -gno-column-info -gno-variable-location-views -gz "
+export FFLAGS="$FFLAGS -Ofast -falign-functions=32 -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -fno-semantic-interposition -g1 -gno-column-info -gno-variable-location-views -gz "
+export CXXFLAGS="$CXXFLAGS -Ofast -falign-functions=32 -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -fno-semantic-interposition -g1 -gno-column-info -gno-variable-location-views -gz "
 %configure  --with-crypto_backend=gcrypt \
 --enable-python \
 --with-python_version=3 \
@@ -169,12 +172,12 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1672168717
+export SOURCE_DATE_EPOCH=1675973885
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cryptsetup
-cp %{_builddir}/cryptsetup-%{version}/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d
-cp %{_builddir}/cryptsetup-%{version}/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d
-cp %{_builddir}/cryptsetup-%{version}/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c
+cp %{_builddir}/cryptsetup-%{version}/COPYING %{buildroot}/usr/share/package-licenses/cryptsetup/c0d79c59a1dae23cf8331a810a5df9f5ab6a709d || :
+cp %{_builddir}/cryptsetup-%{version}/COPYING.LGPL %{buildroot}/usr/share/package-licenses/cryptsetup/6ce6cfc2dfacf60e153e5f61c4c8accc999d322d || :
+cp %{_builddir}/cryptsetup-%{version}/lib/crypto_backend/argon2/LICENSE %{buildroot}/usr/share/package-licenses/cryptsetup/af3048995149ba8dc2597f61e8fb05b978fd217c || :
 pushd ../buildavx2/
 %make_install_v3
 popd
