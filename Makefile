@@ -1,5 +1,5 @@
 PKG_NAME := cryptsetup
-URL = https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.6/cryptsetup-2.6.1.tar.xz
+URL = https://mirrors.kernel.org/pub/linux/utils/cryptsetup/v2.7/cryptsetup-2.7.4.tar.gz
 ARCHIVES = 
 
 include ../common/Makefile.common
